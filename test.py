@@ -1,3 +1,5 @@
+# # Test access to HDFS and Spark cluster
+
 # Copy local file to HDFS.
 !hdfs dfs -put test.csv /tmp
 
@@ -8,7 +10,17 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('test').getOrCreate()
 
 # Load file into DataFrame.
-df = spark.read.csv('/tmp/people.txt', header=True, inferSchema=True)
+df = spark.read.csv('/tmp/test.csv', header=True, inferSchema=True)
+
+# Print schema.
+df.printSchema()
 
 # View DataFrame.
 df.show()
+
+# Stop SparkSession.
+spark.stop()
+
+# Remove file from HDFS.
+!hdfs dfs -rm /tmp/test.csv
+
